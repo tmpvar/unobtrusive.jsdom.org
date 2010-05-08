@@ -1,0 +1,6 @@
+[submodule "server/lib/jsdom"]
+	path = server/lib/jsdom
+	url = git://github.com/tmpvar/jsdom.git
+[submodule "server/lib/node-router"]
+	path = server/lib/node-router
+	url = git://github.com/creationix/node-router.git
