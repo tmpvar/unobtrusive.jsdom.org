@@ -1,5 +1,9 @@
 {
   "contacts" : [
-    { "handle": "tmpvar", "name" : "Elijah Insua", "email" : "tmpvar@gmail.com"}
+    { "handle": "tmpvar", 
+      "name" : "Elijah Insua", 
+      "email" : "tmpvar@gmail.com", 
+      "homepage" : "http://tmpvar.com"
+    }
   ]
 }

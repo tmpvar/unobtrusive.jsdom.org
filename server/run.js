@@ -39,14 +39,15 @@ var getTemplate = function(path) {
 var templateToDom = function(path) {
   var data   = getTemplate(path),
       window = browser.windowAugmentation(dom);
+
   window.addEventListener = function() {};
+  window.alert = function(msg) { sys.puts(msg); };
 
   window.document.innerHTML = data;
   window.window = window;
   with(window) {
     try {
       eval(jQueryScript);
-      window.alert = function(msg) { sys.puts(msg); };
       eval(PureScript);
     } catch (e) {
       sys.puts(sys.inspect(e.stack, true));
@@ -58,26 +59,30 @@ var templateToDom = function(path) {
 // Cache all of the template documents synchronously
 var masterTemplate = templateToDom("master.html");
 
-var wrapWithMaster = function(templateName) {
-  // TODO: optimize, use DocumentFragment + clone
-  masterTemplate.jQuery(".page-content").html(getTemplate(templateName));
-  return masterTemplate;
-};
-
 var renderTemplate = function(templateName, data, directive, contentType) {
   contentType = contentType || "html";
-  
+
   if (contentType.match(/html/) || contentType.match(/\*\/\*/)) {
-    var master = wrapWithMaster(templateName);
+    masterTemplate.jQuery(".page-content").html(getTemplate(templateName));
     // Perform Unobtrusive templating.
     if (data && directive) {
-      master.jQuery(".page-content").render(data, directive);
+      masterTemplate.jQuery(".page-content").render(data, directive);
     }
-    return master.document.innerHTML;
+    return masterTemplate.document.innerHTML;
   } else if (contentType.match(/json/)) {
     return data;
   }
-}
+};
+
+var findContact = function(handle) {
+  for (var i=0; i<datastore.contacts.length; i++) {
+    if (datastore.contacts[i].handle === contact) {
+      return datastore.contacts[i];
+      break;
+    }
+  }
+  return false;
+};
 
 server.get(new RegExp(/\/c\/.+\..+/), router.staticDirHandler(__dirname + "/../browser/", "/c/"));
 
@@ -94,10 +99,10 @@ server.get(/\/contacts\/?$/, function(req, res) {
             ".name" : "contact.name",
             ".email" : "contact.email",
             ".handle" : "contact.handle",
+            ".homepage" : "contact.homepage",
           }
         }
       };
-
   return renderTemplate("contact/list.html", {contacts: datastore.contacts}, directive, contentType);
 });
 
@@ -108,15 +113,9 @@ server.get(/\/contacts\/([^\/]+)\/?$/, function(req, res, contact) {
         ".name" : "name",
         ".email" : "email",
         ".handle" : "handle",
+        ".homepage" : "homepage",
       },
-      data = null;
-
-  for (var i=0; i<datastore.contacts.length; i++) {
-    if (datastore.contacts[i].handle === contact) {
-      data = datastore.contacts[i];
-      break;
-    }
-  }
+      data = findContact(contact);
 
   if (data) {
     return renderTemplate("contact/view.html", data, directive, contentType);
