@@ -1,3 +1,5 @@
 {
-  contacts: []
+  "contacts" : [
+    { "handle": "tmpvar", "name" : "Elijah Insua", "email" : "tmpvar@gmail.com"}
+  ]
 }
