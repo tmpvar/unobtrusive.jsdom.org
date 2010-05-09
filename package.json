@@ -1,7 +1,7 @@
 {
-    "name": "jsdom",
+    "name": "unobtrusive.jsdom.org",
     "version": "0.0.1",
-    "description": "CommonJS implementation of the DOM intended to be platform independent and as minimal/light as possible while completely adhering to the w3c DOM specifications.",
+    "description": "",
     "keywords": [
         "dom",
         "javascript",
@@ -16,19 +16,10 @@
             "web": "http://tmpvar.com" 
         } 
     ],
-    "contributors": [
-        {
-            "name": "Vincent Greene",
-            "email": "ulteriorlife@gmail.com" 
-        },
-        {
-            "name": "Dav Glass",
-            "email": "davglass@gmail.com"
-        }
-    ],
+    "contributors": [],
     "bugs": {
         "mail": "tmpvar@gmail.com",
-        "web": "http://github.com/tmpvar/jsdom/issues" 
+        "web": "http://github.com/tmpvar/unobtrusive.jsdom.org/issues" 
     },
     "licenses": [
         {
