@@ -18,6 +18,7 @@ var port         = 10017,
     server       = router.getServer(function() {}),
     jQueryScript = fs.readFileSync(__dirname + "/../browser/jquery.js"),
     PureScript   = fs.readFileSync(__dirname + "/../browser/pure.js");
+    //directives   = require("");
 
 // TODO: move into level 2
 dom.Document.prototype.compareDocumentPosition = function() {};
@@ -28,9 +29,13 @@ var datastore = JSON.parse(fs.readFileSync(__dirname + "/store.json")),
 
 var getTemplate = function(path) {
   if (!templateCache[path]) {
-    var data = fs.readFileSync(__dirname + "/template/" + path);
-    templateCache[path] = data;
-    return data;
+    try {
+      var data = fs.readFileSync(__dirname + "/../template/" + path);
+      templateCache[path] = data;
+      return data;
+    } catch (e) {
+      return false;
+    }
   } else {
     return templateCache[path];
   }
@@ -76,7 +81,7 @@ var renderTemplate = function(templateName, data, directive, contentType) {
 
 var findContact = function(handle) {
   for (var i=0; i<datastore.contacts.length; i++) {
-    if (datastore.contacts[i].handle === contact) {
+    if (datastore.contacts[i].handle === handle) {
       return datastore.contacts[i];
       break;
     }
@@ -85,6 +90,16 @@ var findContact = function(handle) {
 };
 
 server.get(new RegExp(/\/c\/.+\..+/), router.staticDirHandler(__dirname + "/../browser/", "/c/"));
+
+server.get(/\/templates\/(.+)/, function(req, res, template) {
+  var templateData = getTemplate(template);
+  if (templateData) {
+    return templateData;
+  } else {
+    res.writeHead("404");
+    return "";
+  }
+});
 
 server.get("/", function(req, res) {
   return renderTemplate("index.html");
