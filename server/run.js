@@ -17,8 +17,8 @@ var port         = 10017,
     router       = require("node-router/lib/node-router"),
     server       = router.getServer(function() {}),
     jQueryScript = fs.readFileSync(__dirname + "/../browser/jquery.js"),
-    PureScript   = fs.readFileSync(__dirname + "/../browser/pure.js");
-    //directives   = require("");
+    PureScript   = fs.readFileSync(__dirname + "/../browser/pure.js"),
+    reusable     = require(__dirname + "/../browser/reusable").jsdom;
 
 // TODO: move into level 2
 dom.Document.prototype.compareDocumentPosition = function() {};
@@ -107,33 +107,24 @@ server.get("/", function(req, res) {
 
 // List the contacts
 server.get(/\/contacts\/?$/, function(req, res) {
-  var contentType = req.headers['content-type'] || "text/html", 
-      directive = {
-        ".contacts" : {
-          "contact<-contacts" : {
-            ".name" : "contact.name",
-            ".email" : "contact.email",
-            ".handle" : "contact.handle",
-            ".homepage" : "contact.homepage",
-          }
-        }
-      };
-  return renderTemplate("contact/list.html", {contacts: datastore.contacts}, directive, contentType);
+  var contentType = req.headers['content-type'] || "text/html";
+
+  return renderTemplate("contact/list.html", 
+                        {contacts: datastore.contacts}, 
+                        reusable.directives.contacts, 
+                        contentType);
 });
 
 // Get a contact 
 server.get(/\/contacts\/([^\/]+)\/?$/, function(req, res, contact) {
   var contentType = req.headers['content-type'] || "text/html", 
-      directive = {
-        ".name" : "name",
-        ".email" : "email",
-        ".handle" : "handle",
-        ".homepage" : "homepage",
-      },
       data = findContact(contact);
 
   if (data) {
-    return renderTemplate("contact/view.html", data, directive, contentType);
+    return renderTemplate("contact/view.html", 
+                          data, 
+                          reusable.directives.contact,
+                          contentType);
   } else {
     res.writeHead(404);
     return renderTemplate("error.html");
