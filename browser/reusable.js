@@ -13,9 +13,10 @@
       ".contacts" : {
         "contact<-contacts" : {
           ".name" : "contact.name",
+          ".name@href" : "/contacts/#{contact.handle}",
           ".email" : "contact.email",
           ".handle" : "contact.handle",
-          ".homepage" : "contact.homepage",
+          ".website" : "contact.website",
         }
       }
     },
@@ -23,7 +24,7 @@
       ".name" : "name",
       ".email" : "email",
       ".handle" : "handle",
-      ".homepage" : "homepage",
+      ".website" : "website",
     },
   };
 

@@ -79,16 +79,6 @@ var renderTemplate = function(templateName, data, directive, contentType) {
   }
 };
 
-var findContact = function(handle) {
-  for (var i=0; i<datastore.contacts.length; i++) {
-    if (datastore.contacts[i].handle === handle) {
-      return datastore.contacts[i];
-      break;
-    }
-  }
-  return false;
-};
-
 server.get(new RegExp(/\/c\/.+\..+/), router.staticDirHandler(__dirname + "/../browser/", "/c/"));
 
 server.get(/\/templates\/(.+)/, function(req, res, template) {
@@ -109,20 +99,26 @@ server.get("/", function(req, res) {
 server.get(/\/contacts\/?$/, function(req, res) {
   var contentType = req.headers['content-type'] || "text/html";
 
-  return renderTemplate("contact/list.html", 
-                        {contacts: datastore.contacts}, 
-                        reusable.directives.contacts, 
+  return renderTemplate("contact/list.html",
+                        {contacts: datastore.contacts},
+                        reusable.directives.contacts,
                         contentType);
 });
 
-// Get a contact 
+// Get a contact
 server.get(/\/contacts\/([^\/]+)\/?$/, function(req, res, contact) {
   var contentType = req.headers['content-type'] || "text/html", 
-      data = findContact(contact);
+      data = null;
+  for (var i=0; i<datastore.contacts.length; i++) {
+    if (datastore.contacts[i].handle && datastore.contacts[i].handle === contact) {
+      data = datastore.contacts[i];
+      break;
+    }
+  }
 
   if (data) {
-    return renderTemplate("contact/view.html", 
-                          data, 
+    return renderTemplate("contact/view.html",
+                          data,
                           reusable.directives.contact,
                           contentType);
   } else {
@@ -131,4 +127,4 @@ server.get(/\/contacts\/([^\/]+)\/?$/, function(req, res, contact) {
   }
 });
 
-server.listen(port);
+server.listen(port, "0.0.0.0");
