@@ -18,9 +18,17 @@ var server = connect.createServer(
     connect.bodyDecoder(),
     connect.router(function(r) {
       r.get('/', templates.renderRoute('index'));
-      
-      r.get('/templates', function() {
-        
+      r.get('/contacts', templates.renderRoute('contact/list'));
+
+      r.get('/templates', function(req, res) {
+        var json = JSON.stringify(renderer.templates, null, '  ');
+
+        res.writeHead(200, {
+          'Content-type'   : 'application/json',
+          'Content-length' : json.length
+        });
+
+        res.end(json);
       });
     })
 );

@@ -1,5 +1,4 @@
-
-var templates = {};
+var templates = exports.templates = {};
 
 exports.register = function(name, doc, string, directive) {
   var frag = doc.createDocumentFragment();
@@ -7,9 +6,15 @@ exports.register = function(name, doc, string, directive) {
   
   templates[name] = {
     string    : string,
+    directive : directive,
     document  : doc,
     fragment  : frag,
-    directive : directive
+    toJSON    : function() {
+      return {
+        string    : this.string,
+        directive : this.directive
+      }
+    }
   };
 };
 

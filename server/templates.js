@@ -8,7 +8,8 @@ var jsdom    = require('jsdom').jsdom,
         ProcessExternalResources : false,
         MutationEvents           : false
       }
-    });
+    }),
+    pageContent = doc.getElementById('page-content');
 
 exports.renderRoute = function(template, directive) {
   // Register the incoming template
@@ -20,8 +21,11 @@ exports.renderRoute = function(template, directive) {
                     {});
 
   return function(req, res) {
-    var frag = renderer.render(template),
-        html = frag.innerHTML;
+    pageContent.innerHTML = "";
+    pageContent.appendChild(renderer.render(template));
+
+    var html = doc.outerHTML;
+
 
     res.writeHead(200, {
       'Content-type'   : 'text/html',
