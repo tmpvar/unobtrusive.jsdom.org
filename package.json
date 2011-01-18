@@ -1,59 +1,46 @@
 {
-    "name": "unobtrusive.jsdom.org",
-    "version": "0.0.1",
-    "description": "",
-    "keywords": [
-        "dom",
-        "javascript",
-        "unobtrusive templating",
-        "non-destructive templating",
-        "tutorial"
-    ],
-    "maintainers": [
-        {
-            "name": "Elijah Insua",
-            "email": "tmpvar@gmail.com",
-            "web": "http://tmpvar.com" 
-        } 
-    ],
-    "contributors": [],
-    "bugs": {
-        "mail": "tmpvar@gmail.com",
-        "web": "http://github.com/tmpvar/unobtrusive.jsdom.org/issues" 
-    },
-    "licenses": [
-        {
-            "type": "MIT",
-            "url": "http://github.com/tmpvar/jsdom/blob/master/LICENSE.txt" 
-        } 
-    ],
-    "repositories": [
-        {
-            "type": "git",
-            "url": "git://github.com/tmpvar/unobtrusive.jsdom.org.git" 
-        } 
-    ],
-    "dependencies": {
-       "jsdom": ">= 0.1.0",
-    },
-    "os": [
-        "linux",
-        "macos",
-        "win" 
-    ],
-    "cpu": [
-        "x86",
-        "ppc",
-        "x86_64" 
-    ],
-    "engines": [
-        "v8",
-        "ejs",
-        "node",
-        "rhino" 
-    ],
-    "directories": {
-        "lib": "lib" 
-    },
-    "main": "./lib/jsdom"
+  "name": "unobtrusive.jsdom.org",
+  "version": "0.0.1",
+  "description": "",
+  "keywords": [
+    "dom",
+    "javascript",
+    "unobtrusive templating",
+    "non-destructive templating",
+    "tutorial"
+  ],
+  "maintainers": [
+    {
+      "name": "Elijah Insua",
+      "email": "tmpvar@gmail.com",
+      "web": "http://tmpvar.com" 
+    } 
+  ],
+  "bugs": {
+    "mail": "tmpvar@gmail.com",
+    "web": "http://github.com/tmpvar/unobtrusive.jsdom.org/issues" 
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "http://github.com/tmpvar/jsdom/blob/master/LICENSE.txt" 
+    } 
+  ],
+  "repositories": [
+    {
+      "type": "git",
+      "url": "git://github.com/tmpvar/unobtrusive.jsdom.org.git" 
+    } 
+  ],
+  "dependencies": {
+     "jsdom"   : ">= 0.1.23",
+     "pure"    : ">=2.58.0",
+     "connect" : ">=0.5.5"
+  },
+  "engines": [
+    "node",
+  ],
+  "directories": {
+    "lib": "lib" 
+  }
 }
