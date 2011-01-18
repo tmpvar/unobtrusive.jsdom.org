@@ -35,7 +35,8 @@
   "dependencies": {
      "jsdom"   : ">= 0.1.23",
      "pure"    : ">=2.58.0",
-     "connect" : ">=0.5.5"
+     "connect" : ">=0.5.5",
+     "dirty"   : ">=0.9.1"
   },
   "engines": [
     "node",
