@@ -17,18 +17,47 @@ var server = connect.createServer(
     connect.staticProvider(__dirname + '/../shared'),
     connect.bodyDecoder(),
     connect.router(function(r) {
-      r.get('/', templates.renderRoute('index'));
-      r.get('/contacts', templates.renderRoute('contact/list'));
+      r.get('/', templates.render('index'));
+      r.get('/contacts', templates.render('contact/list', function(cb) {
+        cb(null, db.get('contacts'));
+      }));
+
+      r.post('/contacts', function(req, res) {
+        var contacts = db.get('contacts') || {},
+            email    = req.body.email;
+        
+        if (!contacts[email]) {
+          contacts[email] = req.body;
+          db.set('contacts', contacts);
+
+          res.writeHead(201, {
+            'Content-type' : 'text/html',
+            'Location'     : '/contacts/' + email
+          });
+
+          res.end();
+        } else {
+          res.writeHead(409, {'Content-type' : 'text/html'});
+          res.end('Duplicate Contact\n');
+        }
+      });
+      
+      r.get('/contacts/:contact', templates.render('contact/view', function(email,cb) {
+        var contacts = db.get('contacts');
+        if (contacts[email]) {
+          cb(null, contacts[email])
+        } else {
+          cb(404);
+        }
+      }));
 
       r.get('/templates', function(req, res) {
-        var json = JSON.stringify(renderer.templates, null, '  ');
-
         res.writeHead(200, {
           'Content-type'   : 'application/json',
-          'Content-length' : json.length
+          'Content-length' : renderer.templateSeed.length
         });
 
-        res.end(json);
+        res.end(renderer.templateSeed);
       });
     })
 );

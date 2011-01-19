@@ -1,4 +1,7 @@
-var templates = exports.templates = {};
+var templates = exports.templates = {},
+    pure      = require('pure').pure;
+
+exports.templateSeed = "";
 
 exports.register = function(name, doc, string, directive) {
   var frag = doc.createDocumentFragment();
@@ -16,14 +19,21 @@ exports.register = function(name, doc, string, directive) {
       }
     }
   };
+
+  // Keep the template seed up to date
+  exports.templateSeed = JSON.stringify(templates);
 };
+
 
 exports.render = function(name, data) {
   if (!templates[name]) {
     throw new Error("template '" + name + "' is not registered");
   }
+  var template = templates[name],
+      frag     = template.fragment.cloneNode(true),
+      $p        = template.document.parentWindow.$p;
 
-  var frag = templates[name].fragment.cloneNode(true);
-  // TODO: pure
+  $p(frag).render(data, template.directive);
+  
   return frag;
 };

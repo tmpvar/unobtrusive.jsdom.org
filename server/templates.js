@@ -1,30 +1,37 @@
-var jsdom    = require('jsdom').jsdom,
-    renderer = require(__dirname + '/../shared/renderer'),
-    path     = __dirname + "/../shared/template/",
-    fs       = require('fs');
-    doc      = jsdom(fs.readFileSync(path + 'master.html').toString(), null, {
+var jsdom      = require('jsdom').jsdom,
+    renderer   = require(__dirname + '/../shared/renderer'),
+    path       = __dirname + "/../shared/template/",
+    fs         = require('fs');
+    directives = require(__dirname + '/../shared/directives').templateDirectives,
+    doc        = jsdom(fs.readFileSync(path + 'master.html').toString(), null, {
       features : {
         FetchExternalResources   : false, 
         ProcessExternalResources : false,
         MutationEvents           : false
       }
     }),
-    pageContent = doc.getElementById('page-content');
+    window = doc.createWindow(),
+    pageContent = window.document.getElementById('page-content');
 
-exports.renderRoute = function(template, directive) {
+window.$p = require('pure').$p;
+
+// TODO: callback
+jsdom.jQueryify(window, __dirname + "/../shared/jquery.js");
+
+exports.render = function(template, directive) {
   // Register the incoming template
   var string = fs.readFileSync(path + template + ".html").toString();
 
   renderer.register(template,
-                    doc, 
+                    window.document, 
                     string,
-                    {});
+                    directives[template] || {});
 
   return function(req, res) {
     pageContent.innerHTML = "";
     pageContent.appendChild(renderer.render(template));
 
-    var html = doc.outerHTML;
+    var html = window.document.outerHTML;
 
 
     res.writeHead(200, {
