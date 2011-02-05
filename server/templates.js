@@ -6,8 +6,7 @@ var jsdom      = require('jsdom').jsdom,
     doc        = jsdom(fs.readFileSync(path + 'master.html').toString(), null, {
       features : {
         FetchExternalResources   : false, 
-        ProcessExternalResources : false,
-        MutationEvents           : false
+        ProcessExternalResources : false
       }
     }),
     window = doc.createWindow(),
@@ -16,7 +15,9 @@ var jsdom      = require('jsdom').jsdom,
 window.$p = require('pure').$p;
 
 // TODO: callback
-jsdom.jQueryify(window, __dirname + "/../shared/jquery.js");
+jsdom.jQueryify(window, __dirname + "/../shared/jquery.js", function(window, $) {
+  $("script:last").remove();
+});
 
 exports.render = function(template, directive) {
   // Register the incoming template

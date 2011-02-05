@@ -33,7 +33,7 @@ exports.render = function(name, data) {
       frag     = template.fragment.cloneNode(true),
       $p        = template.document.parentWindow.$p;
 
-  $p(frag).render(data, template.directive);
+  //$p(frag).render(data, template.directive);
   
   return frag;
 };

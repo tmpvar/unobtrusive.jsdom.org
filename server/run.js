@@ -12,7 +12,7 @@ var connect   = require('connect'),
     port      = 3000;
 
 var server = connect.createServer(
-    connect.logger(),
+    //connect.logger(),
     connect.staticProvider(__dirname + '/../browser'),
     connect.staticProvider(__dirname + '/../shared'),
     connect.bodyDecoder(),
@@ -41,7 +41,9 @@ var server = connect.createServer(
           res.end('Duplicate Contact\n');
         }
       });
-      
+
+      r.get('/contacts/add', templates.render('contact/manage'));
+
       r.get('/contacts/:contact', templates.render('contact/view', function(email,cb) {
         var contacts = db.get('contacts');
         if (contacts[email]) {
